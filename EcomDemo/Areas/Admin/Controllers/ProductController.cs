@@ -16,7 +16,7 @@ namespace EcomDemo.Areas.Admin.Controllers
         // GET: Admin/Product
         public ActionResult Index(AddEditProductModel aepm)
         {
-            if (Request.Cookies["UserName"] != null)
+            if (Request.Cookies["CookieUserName"] != null)
             {
                 ProductMasterBAL pmb = new ProductMasterBAL();
                 aepm = pmb.GetProduct(aepm);
@@ -30,7 +30,7 @@ namespace EcomDemo.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult CreateProduct()
         {
-            if (Request.Cookies["UserName"] != null)
+            if (Request.Cookies["CookieUserName"] != null)
             {
                 return View();
             }
@@ -61,7 +61,7 @@ namespace EcomDemo.Areas.Admin.Controllers
 
         public ActionResult EditProduct(int ID)
         {
-            if (Request.Cookies["UserName"] != null)
+            if (Request.Cookies["CookieUserName"] != null)
             {
                 AddEditProductModel aeum = new AddEditProductModel();
                 ProductMasterBAL pmb = new ProductMasterBAL();
@@ -92,7 +92,7 @@ namespace EcomDemo.Areas.Admin.Controllers
             return RedirectToAction("Index", "Product");
         }
 
-        public ActionResult DeleteProduct(int ID)
+        public ActionResult DeleteProduct(int ID)   
         {
             AddEditProductModel aepm = new AddEditProductModel();
             ProductMasterBAL pmb = new ProductMasterBAL();
@@ -104,7 +104,7 @@ namespace EcomDemo.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult AddPhoto(int ID)
         {
-            if (Request.Cookies["UserName"] != null)
+            if (Request.Cookies["CookieUserName"] != null)
             {
                 AddEditProductModel aepm = new AddEditProductModel();
                 ProductMasterBAL pmb = new ProductMasterBAL();
@@ -143,7 +143,7 @@ namespace EcomDemo.Areas.Admin.Controllers
         }
         public ActionResult DeleteProductDetailPhoto(int PdID)
         {
-            if (Request.Cookies["UserName"] != null)
+            if (Request.Cookies["CookieUserName"] != null)
             {
                 AddEditProductModel aepm = new AddEditProductModel();
                 ProductMasterBAL pmb = new ProductMasterBAL();

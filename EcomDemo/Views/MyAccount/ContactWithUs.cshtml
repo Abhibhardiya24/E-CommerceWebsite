@@ -1,0 +1,146 @@
+﻿@model EcomDemo.Model.ContactWithUs
+@{
+    ViewBag.Title = "ContactWithUs";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="breadcrumb-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="breadcrumb-list">
+                    <h1>Contact with us</h1>
+                    <ul>
+                        <li><a href="index.html">home</a> <span class="divider">|</span></li>
+                        <li>Contact us</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="contact-area pad-60">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="contact-form">
+                    <div class="message-title">
+                        <h1>Drop us a message</h1>
+                        <p>We have a great team for supporting our customers. Fill the form to get Great support.</p>
+                    </div>
+                    <div class="row">
+                        @using (Html.BeginForm("ContactWithUs", "MyAccount", FormMethod.Post))
+                        {
+                            <div class="input-filed">
+                                <div class="col-md-6">
+                                    <label>Name</label>
+                                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                                    @*<input name="name" type="text" placeholder="Your Name" />*@
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Email</label>
+                                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                                    @*<input name="email" type="text" placeholder="Your Email" />*@
+                                </div>
+                                <div class="col-md-12">
+                                    <label>Mobile Number</label>
+                                    @Html.TextAreaFor(model => model.MobileNumber, new { @class = "form-control" })
+                                    @*<input name="subject" type="text" placeholder="Your Subject" />*@
+                                    <br />
+                                    
+                                </div>
+                               
+                                <div class="col-md-12">
+                                    <label>Subject</label>
+                                    @Html.TextAreaFor(model => model.Subject, new { @class = "form-control" })
+                                    @*<input name="subject" type="text" placeholder="Your Subject" />*@
+                                    <br />
+                                </div>
+                                
+                            </div>
+                            <div class="col-md-12">
+                                <div class="contact-textarea">
+                                    <label>Message</label>
+                                    @Html.TextAreaFor(model => model.Message, new { @class = "form-control" })
+                                    @*<textarea name="message" id="Message" cols="30" rows="10" placeholder="Message"></textarea>*@
+                                    <input type="submit" value="submit" title="Submit Your Message" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="contact-info">
+                    <div class="single-contact">
+                        <div class="contact-icon">
+                            <i class="fa fa-phone"></i>
+                        </div>
+                        <div class="contact-method">
+                            <h2>+000-111-2222</h2>
+                            <span>Call us Today</span>
+                        </div>
+                    </div>
+                    <div class="single-contact">
+                        <div class="contact-icon">
+                            <i class="fa fa-envelope"></i>
+                        </div>
+                        <div class="contact-method">
+                            <h2><a href="https://wphix.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e8898c858186a88a899b818b9c808d858dc6868d9c">[email&#160;protected]</a></h2>
+                            <span>get in touch with email</span>
+                        </div>
+                    </div>
+                    <div class="single-contact">
+                        <div class="contact-icon">
+                            <i class="fa fa-commenting"></i>
+                        </div>
+                        <div class="contact-method">
+                            <h2>Live chat</h2>
+                            <span>Start live chatting with us</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="map-area">
+                    <div id="googleMap"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--   Core JS Files   -->
+<script src="~/Areas/Admin/assets/js/jquery.3.2.1.min.js" type="text/javascript"></script>
+<script src="~/Areas/Admin/assets/js/bootstrap.min.js" type="text/javascript"></script>
+
+<!--  Charts Plugin -->
+<script src="~/Areas/Admin/assets/js/chartist.min.js"></script>
+
+<!--  Notifications Plugin    -->
+<script src="~/Areas/Admin/assets/js/bootstrap-notify.js"></script>
+
+<!--  Google Maps Plugin    -->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+
+<!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
+<script src="~/Areas/Admin/assets/js/light-bootstrap-dashboard.js?v=1.4.0"></script>
+
+<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
+<script src="~/Areas/Admin/assets/js/demo.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+<script>
+
+@if (TempData["ContactWithUsSubmitted"] != null)
+{
+    <text>
+    toastr.success('', 'Your Message Has Been Subbmitted Successfully! <br/>We will get back to you shortly! &#128513;');
+                            </text>
+
+}
+</script>

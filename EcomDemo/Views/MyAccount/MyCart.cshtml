@@ -1,0 +1,228 @@
+﻿@*@model dynamic*@
+@model EcomDemo.Model.MyCart
+@{
+    ViewBag.Title = "MyCart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="breadcrumb-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="breadcrumb-list">
+                    <h1>Shopping Cart</h1>
+                    <ul>
+                        <li><a href="index.html">home</a> <span class="divider">|</span></li>
+                        <li><a href="cart.html">Shopping cart</a> <span class="divider">|</span></li>
+                        <li>Shopping cart</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="cart-main-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+
+                <div class="table-content table-responsive">
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th class="product-thumbnail">Image</th>
+                                <th class="product-name">Product</th>
+                                <th class="product-price">Price</th>
+                                <th class="product-quantity">Quantity</th>
+                                <th class="product-subtotal">Update (Quantity + Total) </th>
+                                <th class="product-subtotal">Total</th>
+                                <th class="product-remove">Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.myCartList != null)
+                            {
+                                foreach (var item in Model.myCartList)
+                                {
+                                    using (Html.BeginForm("UpdateCart", "MyAccount", FormMethod.Post))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        @Html.HiddenFor(model => model.PID, new { Value = item.PID })
+                                        <tr>
+                                            <td class="product-thumbnail"><a href="@Url.Action("ProductDetails", "Products", new { ID = item.PID })"><img src="~/Areas/Image/@item.ProductPhoto" alt="" /></a></td>
+                                            <td class="product-name"><a href="@Url.Action("ProductDetails", "Products", new { ID = item.PID })">@item.ProductName</a></td>
+                                            <td class="product-price">
+                                                @*<span class="amount">₹@item.ProductPrice</span>*@
+                                                @item.ProductPrice.ToString("C0", new System.Globalization.CultureInfo("en-IN"))
+                                            </td>
+                                            <td>
+                                                @*@Html.HiddenFor(model => model.PID, new { Value = item.PID })*@
+                                                @*<input type="number" value="@item.CMQty" class="cart-plus-minus">*@
+                                                @Html.TextBoxFor(model => model.CMQty, new { Type = "number", Value = @item.CMQty, min = "1" })
+                                            </td>
+                                            <td>
+                                                <button type="submit" class="edit-btn">
+                                                    <i class="fa fa-pencil"></i> Update
+                                                </button>
+                                            </td>
+                                            <td>
+                                                @{
+                                                    decimal totalPrice = item.ProductPrice * item.CMQty;
+                                                    string formattedTotalPrice = totalPrice.ToString("C0", new System.Globalization.CultureInfo("en-IN"));
+                                                }
+
+                                                @Html.TextBoxFor(model => model.ProductPrice, new { @class = "quantity-input", Value = formattedTotalPrice, style = "width: 100px;" })
+
+                                                @*@Html.TextBoxFor(model => model.ProductPrice.ToString("C0", new System.Globalization.CultureInfo("en-IN")), new { @class = "quantity-input", Value = "₹" + (@item.ProductPrice * @item.CMQty), style = "width: 100px;" })*@
+
+                                            </td>
+                                            <td class="product-remove"><a href="@Url.Action("RemoveItemFromCart", "MyAccount", new { ID = @item.PID })"><i class="fa fa-times"></i></a></td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="12">
+                                        <h1>No Item In Cart List</h1>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-sm-5 col-xs-12">
+                    <div class="buttons-cart">
+                        @*<input type="submit" value="Update Cart" />*@
+                        <a href="@Url.Action("Index", "Products")">Continue Shopping</a>
+                    </div>
+                </div>
+                @if (Model.myCartList != null)
+                {
+                    <div class="col-md-12 col-sm-5 col-xs-12">
+                        <div class="cart-section">
+                            @*<div class="coupon">
+                                    <h3>Coupon</h3>
+                                    <p>Enter your coupon code if you have one.</p>
+                                    <input type="text" placeholder="Coupon code" />
+                                    <input type="submit" value="Apply Coupon" />
+                                </div>*@
+                            <div class="cart_totals">
+                                <h2>Cart Totals</h2>
+                                <table class="table table-bordered">
+                                    <tbody>
+                                        <tr class="cart-subtotal">
+                                            <th>
+                                                Sub Total
+                                            </th>
+                                            <td>
+                                                @*@Html.TextBoxFor(model => model.CMQty, new { Value = "₹" + (@item.ProductPrice * @item.CMQty), style = "width: 100px;" })*@
+                                                @*<span class="amount">₹(@item.ProductPrice * @item.CMQty)</span>*@
+                                                @*<span class="amount">₹@(decimal.Round(Model.SubTotal).ToString("0.00"))</span>*@
+                                                <span class="amount">₹@(Model.SubTotal.ToString("C", new System.Globalization.CultureInfo("en-IN")).Substring(1))</span>
+                                            </td>
+                                        </tr>
+                                        <tr class="shipping">
+                                            <th>GST</th>
+                                            <td>
+                                                <ul id="shipping_method">
+                                                    <li>
+                                                        <label>
+                                                            CGST(2.5%): <span class="amount">₹@Model.Cgst.ToString("C", new System.Globalization.CultureInfo("en-IN")).Substring(1)</span>
+                                                            @*CGST(2.5%): <span class="amount">₹@(Math.Round(Model.SubTotal * 2.5 / 100, 2, MidpointRounding.AwayFromZero).ToString("0.00"))</span>*@
+                                                        </label>
+                                                    </li>
+                                                    <li>
+                                                        <label>
+                                                            SGST(2.5%): <span class="amount">₹@Model.Sgst.ToString("C", new System.Globalization.CultureInfo("en-IN")).Substring(1)</span>
+                                                            @*SGST(2.5%): <span class="amount">₹@(Math.Round(Model.SubTotal * 2.5 / 100, 2, MidpointRounding.AwayFromZero).ToString("0.00"))</span>*@
+                                                        </label>
+                                                    </li>
+                                                    <li>
+                                                        <label>
+                                                            IGST(2.5%): <span class="amount">₹@Model.Igst.ToString("C", new System.Globalization.CultureInfo("en-IN")).Substring(1)</span>
+                                                            @*IGST(2.5%): <span class="amount">₹@(Math.Round(Model.SubTotal * 2.5 / 100, 2, MidpointRounding.AwayFromZero).ToString("0.00"))</span>*@
+                                                        </label>
+                                                    </li>
+                                                </ul>
+                                                @*<p><a class="shipping-calculator-button" href="#">Calculate Shipping</a></p>*@
+                                            </td>
+                                        </tr>
+                                        <tr class="order-total">
+                                            <th>Total</th>
+                                            <td>
+                                                <strong><span class="amount">₹@Model.TotalAmount.ToString("C", new System.Globalization.CultureInfo("en-IN")).Substring(1)</span></strong>
+                                                @*<span class="amount">₹@(Math.Round(Model.SubTotal + Model.SubTotal * 7.5 / 100, 2,MidpointRounding.AwayFromZero).ToString("0.00"))</span>*@
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="wc-proceed-to-checkout">
+                                    <a href="@Url.Action("CheckOut", "MyAccount", new { UID = Model.UID })">Proceed to Checkout</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- login-area end -->
+<!--   Core JS Files   -->
+<script src="~/Areas/Admin/assets/js/jquery.3.2.1.min.js" type="text/javascript"></script>
+<script src="~/Areas/Admin/assets/js/bootstrap.min.js" type="text/javascript"></script>
+
+<!--  Charts Plugin -->
+<script src="~/Areas/Admin/assets/js/chartist.min.js"></script>
+
+<!--  Notifications Plugin    -->
+<script src="~/Areas/Admin/assets/js/bootstrap-notify.js"></script>
+
+<!--  Google Maps Plugin    -->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+
+<!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
+<script src="~/Areas/Admin/assets/js/light-bootstrap-dashboard.js?v=1.4.0"></script>
+
+<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
+<script src="~/Areas/Admin/assets/js/demo.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+<script>
+
+@if (TempData["RemoveItemFromCart"] != null)
+{
+    <text>
+    toastr.success('', 'Item Removed from Cart');
+                            </text>
+
+}
+@if (TempData["NoItemInCart"] != null)
+{
+    <text>
+    toastr.error('', 'No Item in Cart List');
+                            </text>
+
+}
+@if (TempData["CartUpdated"] != null)
+{
+    <text>
+    toastr.success('', 'Cart has been updated!');
+                            </text>
+
+}
+</script>
+

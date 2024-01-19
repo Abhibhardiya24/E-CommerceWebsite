@@ -1,0 +1,231 @@
+﻿@model EcomDemo.Model.OrderList
+
+@{
+    ViewBag.Title = "MyOrderDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="breadcrumb-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="breadcrumb-list">
+                    @if (TempData["NewOrder"] != null)
+                    {
+                        <h1>Congratulations!</h1>
+                        <ul>
+                            <li>
+                                @*<a href="index.html">*@
+
+                                <h2>
+                                    Thank You For Your Shopping!
+                                    @*<span class="divider">#@Model.BillNo</span>*@
+                                </h2>
+                            </li>
+                        </ul>
+                    }
+                    else
+                    {
+                        <h1>Order List</h1>
+                        <ul>
+                            <li>
+                                <h2>Order Details Of @Model.UserName</h2>
+                            </li>
+                        </ul>
+
+                    }
+                    @*</a>*@
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 custom-left-margin">
+                <div class="card">
+                    <div class="header">
+                        @if (TempData["NewOrder"] != null)
+                        {
+                            <h2 class="card-title">BillNo <span style="color: #ef0303;">#@Model.BillNo</span><br /></h2>
+                            <h3> Check Your Email<span style="color: #4461fa;"> @Model.Email </span>for the same!</h3>
+                        }
+                        else
+                        {
+                            <h2 class="card-title">BillNo <span style="color: #ef0303;">#@Model.BillNo</span></h2>
+
+                        }
+
+                    </div>
+                    
+                    <div class="content" style="margin-top: 20px;">
+                        <form>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <h6>@Model.UserName</h6>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <h6>@Model.Email</h6>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Contact</label>
+                                        <h6>@Model.MobileNumber</h6>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Address</label>
+                                        <h6>@Model.Address</h6>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Order Date</label>
+                                        <h6 style="color: #ef0303;">@Model.OrderDate</h6>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Payment Mode</label>
+                                        @if (Model.PaymentMode == 1)
+                                        {
+                                            <h6>Direct Bank Transfer</h6>
+                                        }
+                                        @if (Model.PaymentMode == 2)
+                                        {
+                                            <h6>COD</h6>
+                                        }
+                                        @if (Model.PaymentMode == 3)
+                                        {
+                                            <h6>Cheque Payment</h6>
+                                        }
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Transaction Id</label>
+                                        <h6>@Model.TransactionID</h6>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Status</label>
+
+                                        @if (Model.Status == 1)
+                                        {
+                                            <h6 style="color: #a1ef53; ">Received</h6>
+                                        }
+                                        @if (Model.Status == 2)
+                                        {
+                                            <h6 style="color: #4461fa; ">In Process</h6>
+                                        }
+                                        @if (Model.Status == 3)
+                                        {
+                                            <h6 style="color: #9a9009; ">Shipped</h6>
+                                        }
+                                        @if (Model.Status == 4)
+                                        {
+                                            <h6 style="color: #a44f4f; ">Delivered</h6>
+                                        }
+                                        @if (Model.Status == 5)
+                                        {
+                                            <h6 style="color: #ff0000; ">Order Cancel</h6>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Order Summary</h4>
+                    </div>
+                    <div class="content" style="height:250px;">
+
+                        <table class="table">
+                            <tr>
+                                <td><label>Total Quantity</label></td>
+                                <td style="text-align: right; color: #ef0303;">@Model.TotalQty</td>
+                            </tr>
+                            <tr>
+                                <td><label>CGST(2.5%)</label></td>
+                                <td style="text-align:right; color: #8de731;">₹@Model.Cgst.ToString("C", new System.Globalization.CultureInfo("en-IN")).Substring(1)</td>
+                            </tr>
+                            <tr>
+                                <td><label>SGST(2.5%)</label></td>
+                                <td style="text-align: right; color: #8de731; ">₹@Model.Sgst.ToString("C", new System.Globalization.CultureInfo("en-IN")).Substring(1)</td>
+                            </tr>
+                            <tr>
+                                <td><label>IGST(2.5%)</label></td>
+                                <td style="text-align: right; color: #8de731; ">₹@Model.Igst.ToString("C", new System.Globalization.CultureInfo("en-IN")).Substring(1)</td>
+                            </tr>
+                            <tr>
+                                <td><label>Sub Total</label></td>
+                                <td style="text-align: right; color: #061b8f; ">₹@Model.SubTotal.ToString("C", new System.Globalization.CultureInfo("en-IN")).Substring(1)</td>
+                            </tr>
+                            <tr>
+                                <td><label>Total Amount</label></td>
+                                <td style="text-align: right; color: #0b2ff3; ">₹@Model.TotalAmount.ToString("C", new System.Globalization.CultureInfo("en-IN")).Substring(1)</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-10" style="margin-left: 100px;">
+                <div class="content table-responsive table-h-width">
+                    <table class="table table-hover table-striped custom-bordered-table">
+                        <tr>
+                            <th>SrNo</th>
+                            <th>Name</th>
+                            <th>Photo</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                        </tr>
+                        <tbody>
+
+                            @foreach (var item in Model.orderLists)
+                            {
+                                <tr>
+                                    <td>@item.SrNo</td>
+
+                                    <td>
+                                        <a href="@Url.Action("ProductDetails", "Products", new { ID = item.PID })">
+                                            @item.ProductName
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("ProductDetails", "Products", new { ID = item.PID })">
+                                            <img src="~/Areas/Image/@item.ProductPhoto" height=100 width=125 />
+                                        </a>
+                                    </td>
+                                    <td>@item.ProductQuantity</td>
+                                    @*style="text-align: center;"*@
+                                    <td>₹@item.ProductPrice.ToString("C", new System.Globalization.CultureInfo("en-IN")).Substring(1)</td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+
+    .custom-left-margin {
+        margin-left: 100px;
+    }
+
+    .custom-bordered-table {
+        border: 1px solid #ddd;
+    }
+</style>

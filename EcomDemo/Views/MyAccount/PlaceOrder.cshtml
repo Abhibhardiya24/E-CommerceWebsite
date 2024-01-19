@@ -1,0 +1,79 @@
+﻿@model EcomDemo.Model.CheckOut
+@{
+    ViewBag.Title = "PlaceOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="breadcrumb-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="breadcrumb-list">
+                    <h1>Thank You For Shopping!</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            
+            <div class="table-content table-responsive">
+                <h2>Your Order Summary:</h2>
+                <table>
+                    <thead>
+                        @*@Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.PID, new { Value = Model.PID })*@
+                        <tr>
+                            <th class="product-thumbnail">Image</th>
+                            <th class="product-name">Product</th>
+                            <th class="product-price">Price</th>
+                            <th class="product-quantity">Quantity</th>
+                            <th class="product-subtotal">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.productLists)
+                        {
+                            <tr>
+                                <td class="product-thumbnail"><a href="@Url.Action("ProductDetails", "Products", new { ID = item.PID })"><img src="~/Areas/Image/@item.ProductPhoto" alt="" /></a></td>
+                                <td class="product-name"><a href="@Url.Action("ProductDetails", "Products", new { ID = item.PID })">@item.ProductName</a></td>
+                                <td class="product-price"><span class="amount">₹@item.ProductPrice</span></td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.CMQty, new { Type = "number", Value = @item.ProductQuantity, min = "1", style = "font-weight: bold;" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.CMQty, new { @class = "quantity-input", Value = "₹" + (@item.ProductPrice * @item.ProductQuantity), style = "width: 100px; font-weight: bold;" })
+                                </td>
+                            </tr>
+                        }
+                        <tr>
+                            <td colspan="12">
+                                <h2>Your Bill Number is: <b style="color: red;">@Model.BillNo</b></h2>
+                                <h2>Your Total Amount is: <b style="color: blue;">₹@Model.TotalAmount</b> (Including GST) </h2>
+                                <h3>Check Your Email <b style="color: black;">@Model.Email</b>  For Order Details!</h3>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-7 col-xs-12 custom-align-right">
+        <div class="buttons-cart">
+            @*<input type="submit" value="Update Cart" />*@
+            <a href="@Url.Action("Index", "Products")">Continue Shopping</a>
+        </div>
+    </div>
+</div>
+<style>
+    .custom-align-right {
+        text-align: right;
+        float:inline-end;
+    }
+</style>
+
+

@@ -1,0 +1,127 @@
+﻿@*@model dynamic*@
+
+@model EcomDemo.Model.WishList
+@{
+    ViewBag.Title = "WishList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="breadcrumb-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="breadcrumb-list">
+                    <h1>Wishlist</h1>
+                    <ul>
+                        <li><a href="index.html">home</a> <span class="divider">|</span></li>
+                        <li><a href="cart.html">Shopping cart</a> <span class="divider">|</span></li>
+                        <li>Wishlist</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="wishlist-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="wishlist-content">
+                    <form action="#">
+                        <div class="wishlist-table table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th class="product-remove"><span class="nobr">Remove</span></th>
+                                        <th class="product-thumbnail">Image</th>
+                                        <th class="product-name"><span class="nobr">Product Name</span></th>
+                                        <th class="product-price"><span class="nobr"> Product Price </span></th>
+                                        <th class="product-add-to-cart"><span class="nobr">add-to-cart </span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.wishList != null)
+                                    {
+                                        foreach (var item in Model.wishList)
+                                        {
+                                            <tr>
+                                                <td class="product-remove"><a href="@Url.Action("RemoveItemFromWishList","MyAccount", new {ID = @item.PID})">×</a></td>
+                                                <td class="product-thumbnail"><a href="@Url.Action("ProductDetails", "Products", new { ID = item.PID })"><img src="~/Areas/Image/@item.ProductPhoto" alt="" /></a></td>
+                                                <td class="product-name"><a href="@Url.Action("ProductDetails", "Products", new { ID = item.PID })">@item.ProductName</a></td>
+                                                <td class="product-price"><span class="amount">@item.ProductPrice.ToString("C0", new System.Globalization.CultureInfo("en-IN"))</span></td>
+                                                <td class="product-add-to-cart"><a href="@Url.Action("AddtoCartFromWishList","Products", new {PID = @item.PID})">Add to Cart</a></td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="12">
+                                                <h1>No Item In Wish List</h1>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                    <div class="col-md-12 mt-auto float-end text-right">
+                                        <div class="buttons-cart" id="buymore">
+                                            <a href="@Url.Action("Index", "Products")">Add More</a>
+                                        </div>
+                                    </div>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--   Core JS Files   -->
+<script src="~/Areas/Admin/assets/js/jquery.3.2.1.min.js" type="text/javascript"></script>
+<script src="~/Areas/Admin/assets/js/bootstrap.min.js" type="text/javascript"></script>
+
+<!--  Charts Plugin -->
+<script src="~/Areas/Admin/assets/js/chartist.min.js"></script>
+
+<!--  Notifications Plugin    -->
+<script src="~/Areas/Admin/assets/js/bootstrap-notify.js"></script>
+
+<!--  Google Maps Plugin    -->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+
+<!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
+<script src="~/Areas/Admin/assets/js/light-bootstrap-dashboard.js?v=1.4.0"></script>
+
+<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
+<script src="~/Areas/Admin/assets/js/demo.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+<script>
+
+@if (TempData["ItemAddedInCart"] != null)
+{
+    <text>
+    toastr.success('', 'Item Added into Cart &#128513;');
+                            </text>
+
+}
+@if (TempData["RemoveItemFromWishList"] != null)
+{
+    <text>
+    toastr.error('', 'Item Removed from WishLists &#128560;');
+                            </text>
+
+}
+@if (TempData["NoItemInWishList"] != null)
+{
+    <text>
+    toastr.warning('', 'There is no wishlist item in your account! &#128560;');
+                            </text>
+
+}
+</script>

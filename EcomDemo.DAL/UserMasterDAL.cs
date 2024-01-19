@@ -9,6 +9,7 @@ using EcomDemo.Model;
 using System.Data;
 using System.IO;
 using System.ComponentModel;
+using System.Globalization;
 
 namespace EcomDemo.DAL
 {
@@ -75,6 +76,7 @@ namespace EcomDemo.DAL
                         while (reader.Read())
                         {
                             AdminViewModel avm = new AdminViewModel();
+                            avm.SrNo = Convert.ToInt64(reader["SrNo"]);
                             avm.ID = Convert.ToInt32(reader["U_ID"]);
                             avm.UserName = reader["Uname"].ToString();
                             avm.Email = reader["Uemail"].ToString();
@@ -194,6 +196,125 @@ namespace EcomDemo.DAL
                 throw;
             }
             return aeum;
+        }
+
+        public ContactWithUs GetContactUsLists(ContactWithUs cwu)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(ConnectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("ContactMasterSP", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandTimeout = 0;
+                        cmd.Parameters.Add(new SqlParameter("@mode", "GetContactUsLists"));
+                        cmd.Connection.Open();
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if(reader.HasRows)
+                            {
+                                List<ContactWithUs> list = new List<ContactWithUs>();
+                                while (reader.Read())
+                                {
+                                    ContactWithUs contact = new ContactWithUs();
+                                    contact.SrNo = Convert.ToInt64(reader["SrNo"]);
+                                    contact.CoID = Convert.ToInt32(reader["Co_ID"]);
+                                    contact.UID = Convert.ToInt32(reader["U_ID"]);
+                                    contact.Name = reader["CO_Name"].ToString();
+                                    contact.Email = reader["Email"].ToString();
+                                    contact.MobileNumber = reader["CO_MobileNumber"].ToString();
+                                    contact.Subject = reader["CO_Subject"].ToString();
+                                    contact.Message = reader["CO_Message"].ToString();
+                                    //contact.ContactDate = DateTime.ParseExact(reader["ContactDate"].ToString(), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                                    contact.ContactDate = Convert.ToDateTime(reader["ContactDate"]);
+                                    list.Add(contact);
+                                }
+                                cwu.contactLists = list;
+                            }
+                        }
+                        cmd.Connection.Close();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return cwu;
+        }
+
+        public ContactWithUs ViewMessage(ContactWithUs cwu)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(ConnectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("ContactMasterSP", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@mode", "GetContactUsListByCoID"));
+                        //cmd.Parameters.Add(new SqlParameter("@Cocreatedate", SqlDbType.DateTime)).Value = cwu.ContactDate;
+                        //cmd.Parameters.Add(new SqlParameter("@U_ID", SqlDbType.Int)).Value = cwu.UID;
+                        cmd.Parameters.Add(new SqlParameter("@Co_ID", SqlDbType.Int)).Value = cwu.CoID;
+                        cmd.CommandTimeout = 0;
+                        cmd.Connection.Open();
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if(reader.HasRows)
+                            {
+                                while(reader.Read())
+                                {
+                                    cwu.Name = reader["CO_Name"].ToString();
+                                    cwu.MobileNumber = reader["CO_MobileNumber"].ToString();
+                                    cwu.Email = reader["Email"].ToString();
+                                    cwu.Subject = reader["CO_Subject"].ToString();
+                                    cwu.Message = reader["CO_Message"].ToString();
+                                    cwu.ContactDate = Convert.ToDateTime(reader["ContactDate"]); 
+                                }
+                                
+                            }
+                        }
+                        cmd.Connection.Close();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return cwu;
+        }
+
+        public ContactWithUs DeleteMessage(ContactWithUs cwu)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(ConnectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("ContactMasterSP", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@mode", "DeleteMessageByCoID"));
+                        //cmd.Parameters.Add(new SqlParameter("@Cocreatedate", SqlDbType.DateTime)).Value = cwu.ContactDate;
+                        //cmd.Parameters.Add(new SqlParameter("@U_ID", SqlDbType.Int)).Value = cwu.UID;
+                        cmd.Parameters.Add(new SqlParameter("@Co_ID", SqlDbType.Int)).Value = cwu.CoID;
+                        cmd.CommandTimeout = 0;
+                        cmd.Connection.Open();
+                        cmd.ExecuteNonQuery();
+                        cmd.Connection.Close();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return cwu;
         }
     }
 }

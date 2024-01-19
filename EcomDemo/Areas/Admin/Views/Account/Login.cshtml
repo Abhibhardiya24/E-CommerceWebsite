@@ -149,12 +149,22 @@
                                     </text>
 
                                 }
-     else if(@ViewBag.ForgotPasswordSuccess != null)
+
+    @if (TempData["ForgotPasswordChanged"] != null)
             {
          <text>
-    
+
     toastr.success('Your automated generated Password sent successfully to your email!', 'Check Your Email...');
-   
+
                                     </text>
             }
+      @if(TempData["ChangedPassword"] != null)
+            {
+         <text>
+
+    toastr.success('Your Password has been changed!', 'Login Again...');
+
+                                    </text>
+            }
+    
 </script>

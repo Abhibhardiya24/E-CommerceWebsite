@@ -1,0 +1,231 @@
+﻿@*@model dynamic*@
+@*@model EcomDemo.Model.MyCart*@
+
+<header class="header-pos">
+    <!-- header-bottom-area start -->
+    <div class="header-bottom-area">
+        <div class="container">
+            <div class="inner-container">
+                <div class="row">
+                    <div class="col-md-2 col-sm-4 col-xs-5">
+                        <div class="logo">
+                            <a href="index.html"><img src="img/logo-white-text.png" alt="" /></a>
+                        </div>
+                    </div>
+                    <div class="col-md-8 hidden-xs hidden-sm">
+                        <div class="main-menu">
+                            <nav>
+                                <ul>
+                                    <li>
+                                        <a href="@Url.Action("Index", "Home")">home</a>
+                                    </li>
+                                    <li><a href="about.html">about</a></li>
+                                    <li class="static">
+                                        <a href="@Url.Action("Index", "Products")">shop</a>
+                                    </li>
+                                    <li><a href="@Url.Action("ContactWithUs","MyAccount")">contact</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-8 col-xs-7 header-right">
+                        <div class="my-cart">
+                            <div class="total-cart">
+                                <a href="cart.html">
+                                    <i class="fa fa-shopping-cart"></i>
+                                    <span>2</span>
+                                </a>
+                            </div>
+                            <ul>
+                                @*@if (Request.Cookies["CookieByUserName"] != null)
+                                {
+                                    if (Model != null)
+                                    {
+                                        foreach (var item in Model.myCartList)
+                                        {
+                                            <li>
+                                                <div class="cart-img">
+                                                    <a href="@Url.Action("ProductDetails", "Products", new { ID = item.PID })"><img alt="" src="~/Areas/Image/@item.ProductPhoto"></a>
+                                                </div>
+                                                <div class="cart-info">
+                                                    <h4><a href="#">@item.ProductName</a></h4>
+                                                    <span>₹@item.ProductPrice<span>x @item.CMQty</span></span>
+                                                </div>
+                                                <div class="del-icon">
+                                                    <i class="fa fa-times-circle"></i>
+                                                </div>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {*@
+                                        <li>
+                                            <div class="cart-img">
+                                                <a href="#"><img alt="" src="img/cart/1.jpg"></a>
+                                            </div>
+                                            <div class="cart-info">
+                                                <h4><a href="#">Vestibulum suscipit</a></h4>
+                                                <span>£165.00 <span>x 1</span></span>
+                                            </div>
+                                            <div class="del-icon">
+                                                <i class="fa fa-times-circle"></i>
+                                            </div>
+                                        </li>
+                                    @*}
+                                }*@
+                                @*<li>
+                                        <div class="cart-img">
+                                            <a href="#"><img alt="" src="img/cart/1.jpg"></a>
+                                        </div>
+                                        <div class="cart-info">
+                                            <h4><a href="#">Vestibulum suscipit</a></h4>
+                                            <span>£165.00 <span>x 1</span></span>
+                                        </div>
+                                        <div class="del-icon">
+                                            <i class="fa fa-times-circle"></i>
+                                        </div>
+                                    </li>*@
+                                <li class="cart-border">
+                                    <div class="subtotal-text">Subtotal: </div>
+                                    <div class="subtotal-price">£300.00</div>
+                                </li>
+                                <li>
+                                    @if (Request.Cookies["CookieByUserName"] != null)
+                                    {
+                                        int UID = Convert.ToInt32(Request.Cookies["UserCookieByID"].Value);
+                                        <a class="cart-button" href="@Url.Action("MyCart", "MyAccount", new {ID = UID})">view cart</a>
+                                        <a class="checkout" href="@Url.Action("CheckOut", "MyAccount")">checkout</a>
+                                    }
+                                    else
+
+                                    {
+                                        <a class="cart-button" href="@Url.Action("MyCart", "MyAccount")">view cart</a>
+                                        <a class="checkout" href="@Url.Action("CheckOut", "MyAccount")">checkout</a>
+                                    }
+
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="user-meta">
+                            <a href="#"><i class="fa fa-cog"></i></a>
+                            <ul>
+                                @if (Request.Cookies["CookieByUserName"] != null)
+                                {
+                                    <li><a href="#">My Account</a></li>
+                                    <li><a href="@Url.Action("WishList", "MyAccount")">Wish list</a></li>
+                                    <li><a href="@Url.Action("MyOrders", "MyAccount")">My Orders</a></li>
+                                    <li><a href="@Url.Action("CheckOut", "MyAccount")">Checkout</a></li>
+                                    <li><a href="#">Testimonial</a></li>
+                                    <li><a href="@Url.Action("ChangePassword", "MyAccount")">Change Password</a></li>
+                                    <li><a href="@Url.Action("LogOut", "MyAccount")">LogOut</a></li>
+                                }
+                                else
+                                {
+                                    <li><a href="#">My Account</a></li>
+
+                                    @*<li><a href="@Url.Action("WishList", "MyAccount")">Wish list</a></li>*@
+                                    <li><a href="@Url.Action("CheckOut", "MyAccount")">Checkout</a></li>
+                                    <li><a href="#">Testimonial</a></li>
+                                    <li><a href="@Url.Action("Index", "MyAccount")">Login</a></li>
+                                }
+
+                            </ul>
+                        </div>
+                        <div class="header-search">
+                            <i class="fa fa-search"></i>
+                            <div class="header-form">
+                                <form action="#">
+                                    <input type="text" placeholder="search" />
+                                    <button><i class="fa fa-search"></i></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- header-bottom-area end -->
+    <!-- mobile-menu-area start -->
+    <div class="mobile-menu-area visible-xs visible-sm">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="mobile-menu">
+                        <nav id="dropdown">
+                            <ul>
+                                <li>
+                                    <a href="index.html">Home</a>
+                                    <ul>
+                                        <li><a href="index.html">Homepage Version 1</a></li>
+                                        <li><a href="index-2.html">Homepage Version 2</a></li>
+                                        <li><a href="index-3.html">Homepage Version 3</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="about.html">About</a></li>
+                                <li><a href="blog.html">blog</a></li>
+                                <li>
+                                    <a href="shop.html">Shop</a>
+                                    <ul>
+                                        <li>
+                                            <a href="#">WOMEN CLOTH</a>
+                                            <ul>
+                                                <li><a href="shop.html">casual shirt</a></li>
+                                                <li><a href="shop.html">rikke t-shirt</a></li>
+                                                <li><a href="shop.html">mia top </a></li>
+                                                <li><a href="shop.html">muscle tee</a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="#">MEN CLOTH</a>
+                                            <ul>
+                                                <li><a href="shop.html">casual shirt</a></li>
+                                                <li><a href="shop.html">rikke t-shirt</a></li>
+                                                <li><a href="shop.html">mia top </a></li>
+                                                <li><a href="shop.html">muscle tee</a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="#">WOMEN JEWELRY</a>
+                                            <ul>
+                                                <li><a href="shop.html">necklace </a></li>
+                                                <li><a href="shop.html">chunky short striped</a></li>
+                                                <li><a href="shop.html">samhar cuff </a></li>
+                                                <li><a href="shop.html">nail set</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li><a href="shop.html">Footwear </a></li>
+                                <li>
+                                    <a href="#">Pages</a>
+                                    <ul>
+                                        <li><a href="about.html">about</a></li>
+                                        <li><a href="blog.html">blog</a></li>
+                                        <li><a href="blog-2-column.html">blog 2 column</a></li>
+                                        <li><a href="blog-full-width.html">blog full width</a></li>
+                                        <li><a href="blog-right-sidebar.html">blog right sidebar</a></li>
+                                        <li><a href="single-blog.html">single blog</a></li>
+                                        <li><a href="single-blog-video.html">single blog video</a></li>
+                                        <li><a href="cart.html">shopping cart</a></li>
+                                        <li><a href="checkout.html">checkout</a></li>
+                                        <li><a href="wishlist.html">wishlist</a></li>
+                                        <li><a href="contact.html">contact</a></li>
+                                        <li><a href="login.html">login</a></li>
+                                        <li><a href="shop.html">shop</a></li>
+                                        <li><a href="product-details.html">product details</a></li>
+                                        <li><a href="shop-full-width.html">shop full width</a></li>
+                                        <li><a href="shop-right-sidebar.html">shop right sidebar</a></li>
+                                        <li><a href="404.html">404 error</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="contact.html">Contact</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- mobile-menu-area end -->
+</header>

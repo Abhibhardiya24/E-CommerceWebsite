@@ -14,6 +14,7 @@ using System.Data.SqlClient;
 using System.Data;
 using EcomDemo.BAL;
 
+
 namespace EcomDemo.Areas.Admin.Controllers
 {
 
@@ -33,6 +34,8 @@ namespace EcomDemo.Areas.Admin.Controllers
             {
                 ViewBag.returnUrl = returnUrl;
                 ViewBag.ForgotPasswordSuccess = TempData["PasswordChanged"];
+                ViewBag.ChangedPassword = TempData["ChangedPassword"];
+
                 return View();
             }
 
@@ -137,22 +140,24 @@ namespace EcomDemo.Areas.Admin.Controllers
                 cp.mycookieID = aid;
                 AdminLoginBAL alb = new AdminLoginBAL();
                 bool result = alb.ChangePassword(cp);
-                if(result)
+                if(ModelState.IsValid)
                 {
-                    if (ModelState.IsValid)
+                    if (result)
                     {
 
                         // TempData["PasswordChanged"] = "PasswordChanged";
                         HttpCookie myCookie = new HttpCookie("CookieUserName");
                         myCookie.Expires = DateTime.Now.AddDays(-1D);
                         Response.Cookies.Add(myCookie);
+                        TempData["ChangedPassword"] = "ChangedPassword";
                         return RedirectToAction("login", "account");
                     }
+                    else
+                    {
+                        ViewBag.ChangePasswordError = "";
+                    }
                 }
-                else
-                {
-                    ViewBag.ChangePasswordError = "";
-                }
+                
             }
            
             return View(cp);
@@ -171,28 +176,32 @@ namespace EcomDemo.Areas.Admin.Controllers
         {
             AdminLoginBAL alb = new AdminLoginBAL();
             bool result = alb.GetUserNameFP(fp);
-            if (result)
+            if(ModelState.IsValid)
             {
-                MailMessage mail = new MailMessage("abhibhardiya@gmail.com", fp.Email);
-                mail.Body = "Your New Automated Generated Password is: <b>" + fp.Body + "</b>";
-                mail.IsBodyHtml = true;
-                SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
-                smtp.EnableSsl = true;
-                smtp.UseDefaultCredentials = false;
-                NetworkCredential nc = new NetworkCredential("abhibhardiya@gmail.com", "xqjagglnduidliqv");
-                smtp.Credentials = nc;
-                smtp.Host = "smtp.gmail.com";
-                smtp.Port = 587;
-                smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-                smtp.Send(mail);
-                TempData["PasswordChanged"] = "PasswordChanged";
-                return RedirectToAction("Login", "Account");
-                
+                if (result)
+                {
+                    MailMessage mail = new MailMessage("abhibhardiya@gmail.com", fp.Email);
+                    mail.Body = "Your New Automated Generated Password is: <b>" + fp.Body + "</b>";
+                    mail.IsBodyHtml = true;
+                    SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
+                    smtp.EnableSsl = true;
+                    smtp.UseDefaultCredentials = false;
+                    NetworkCredential nc = new NetworkCredential("abhibhardiya@gmail.com", "xqjagglnduidliqv");
+                    smtp.Credentials = nc;
+                    smtp.Host = "smtp.gmail.com";
+                    smtp.Port = 587;
+                    smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    smtp.Send(mail);
+                    TempData["ForgotPasswordChanged"] = "ForgotPasswordChanged";
+                    return RedirectToAction("Login", "Account");
+
+                }
+                else
+                {
+                    ViewBag.ForgotPasswordError = "";
+                }
             }
-            else
-            {
-                ViewBag.ForgotPasswordError = "";
-            }
+           
             return View(fp);
         }
     }

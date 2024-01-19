@@ -1,0 +1,185 @@
+﻿@model EcomDemo.Model.OrderReportChart
+@{
+    ViewBag.Title = "OrderChart";
+    Layout = "~/Areas/Admin/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Bar Chart</h4>
+                        <canvas id="myBarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Pie Chart</h4>
+                        <canvas id="myPieChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Polar Chart</h4>
+                        <canvas id="myPolarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title"></h4>
+                        <canvas id=""></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+        function fetchDataAndUpdateChart() {
+            //alert('Hi')
+            $.ajax({
+                url: "/Order/OrderReportChart",
+                method: 'Get',
+                dataType: 'json',
+                success: function (result)
+                {
+                    
+                       // alert('Success')
+                        updateBarChart(result);
+                        updatePieChart(result);
+                        updatePolarChart(result);
+                   
+                },
+                error: function () {
+                    /*alert('Fail')*/
+                    //window.location.href = "/Admin/Account/Login";
+                    window.location.replace("/Admin/Account/Login");
+                }
+            });
+        }
+
+        function updateBarChart(data) {
+
+            const ctx = document.getElementById('myBarChart');
+            var ProductName = [];
+            var TotalQuantitySold = [];
+
+
+            if (data != null && data.Success) {
+                data.Data.charts.forEach(function (item) {
+                    ProductName.push(item.ProductName);
+                    TotalQuantitySold.push(item.TotalQuantitySold);
+                });
+            }
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ProductName,
+                    datasets: [{
+                        backgroundColor: ["#2ecc71", "#3498db", "#0094ff", "#ff0000", "#00ffff"],
+                        label: 'Total Sold Items',
+                        data: TotalQuantitySold,
+                        // borderWidth: 3,
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        },
+                    }]
+                },
+            });
+        }
+        function updatePieChart(data) {
+
+            const ctx = document.getElementById('myPieChart');
+            var ProductName = [];
+            var TotalQuantitySold = [];
+
+            if (data != null && data.Success) {
+                data.Data.charts.forEach(function (item) {
+                    ProductName.push(item.ProductName);
+                    TotalQuantitySold.push(item.TotalQuantitySold);
+                });
+            }
+            const chart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ProductName,
+                    datasets: [{
+                        backgroundColor: ["#2ecc71", "#3498db", "#0094ff", "#ff0000", "#00ffff"],
+                        label: 'Total Sold Items',
+                        data: TotalQuantitySold,
+                        borderWidth: 3,
+
+                    }]
+                },
+            });
+        }
+        function updatePolarChart(data) {
+
+            const ctx = document.getElementById('myPolarChart');
+            var ProductName = [];
+            var TotalQuantitySold = [];
+
+            if (data != null && data.Success) {
+                data.Data.charts.forEach(function (item) {
+                    ProductName.push(item.ProductName);
+                    TotalQuantitySold.push(item.TotalQuantitySold);
+                });
+            }
+            const chart = new Chart(ctx, {
+                type: 'polarArea',
+                data: {
+                    labels: ProductName,
+                    datasets: [{
+                        backgroundColor: ["#2ecc71", "#3498db", "#0094ff", "#ff0000", "#00ffff"],
+                        label: 'Total Sold Items',
+                        data: TotalQuantitySold,
+                        // borderWidth: 3,
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        },
+                    }]
+                },
+            });
+        }
+
+        fetchDataAndUpdateChart();
+
+
+        setInterval(function () {
+            fetchDataAndUpdateChart();
+        }, 6000);
+
+
+    });
+</script>
+
+<style>
+    #k {
+        color: #00ffff
+    }
+</style>

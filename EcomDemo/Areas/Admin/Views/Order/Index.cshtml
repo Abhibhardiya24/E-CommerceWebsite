@@ -1,0 +1,158 @@
+﻿@model EcomDemo.Model.OrderList
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_MainLayout.cshtml";
+}
+@*<style>
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+    </style>*@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <!--<div class="header">
+                <h4 class="title">Striped Table with Hover</h4>
+                <p class="category">Here is a subtitle for this table</p>-->
+                @*<a href="@Url.Action("Create","User")" class="btn btn-info btn-fill pull-right">Add User</a>*@
+            <!--</div>-->
+
+            <div class="content table-responsive table-full-width">
+                <table class="table table-hover table-striped">
+                    <tr>
+                        <th>SrNo</th>
+                        <th>BillNo</th>
+                        <th>UserName</th>
+                        <th>Email</th>
+                        <th>Contact</th>
+                        <th>PaymentMode</th>
+                        <th>TotalQty</th>
+                        <th>TotalAmount</th>
+                        <th>OrderStatus</th>
+                        <th>OrderDate</th>
+                    </tr>
+                    <tbody>
+
+                        @foreach (var item in Model.orderLists)
+                        {
+                            <tr>
+                                <td>@item.SrNo</td>
+                                <td>
+                                    <a title="View Order Details" href="@Url.Action("OrderDetails", "Order", new {BillNo = item.BillNo})" style="color:red">
+                                        @item.BillNo
+                                    </a>
+                                </td>
+                                <td>
+                                    <a title="View User" href="@Url.Action("EditUser", "User", new { ID = item.UID })">
+                                        @item.UserName
+                                    </a>
+                                </td>
+                                <td>@item.Email</td>
+                                <td>@item.MobileNumber</td>
+                                <td>
+                                    @if (item.PaymentMode == 1)
+                                    {
+                                        <h6>Direct Bank Transfer</h6>
+                                    }
+                                    @if (item.PaymentMode == 2)
+                                    {
+                                        <h6>COD</h6>
+                                    }
+                                    @if (item.PaymentMode == 3)
+                                    {
+                                        <h6>Cheque Payment</h6>
+                                    }
+                                </td>
+                                <td style="text-align: center;">@item.TotalQty</td>
+                                @*<td>₹@item.TotalAmount</td>*@
+                                <td>@item.TotalAmount.ToString("C0", new System.Globalization.CultureInfo("en-IN"))</td>
+
+                                <td>
+                                    @if (item.Status == 1)
+                                    {
+                                        // <p style="color: #a1ef53; ">Received</p>
+                                        <h6 style="color: #a1ef53; ">Received</h6>
+                                    }
+                                    @if (item.Status == 2)
+                                    {
+                                        //<p style="color: #4461fa; ">In Process</p>
+                                        <h6 style="color: #4461fa; ">In Process</h6>
+                                    }
+                                    @if (item.Status == 3)
+                                    {
+                                        //<p style="color: #9a9009; ">Shipped</p>
+                                        <h6 style="color: #9a9009; ">Shipped</h6>
+                                    }
+                                    @if (item.Status == 4)
+                                    {
+                                        // <p style="color: #a44f4f; ">Delivered</p>
+                                        <h6 style="color: #a44f4f; ">Delivered</h6>
+                                    }
+                                    @if (item.Status == 5)
+                                    {
+                                        // <p style="color: #ff0000; ">Order Cancel</p>
+                                        <h6 style="color: #ff0000; ">Order Cancel</h6>
+                                    }
+                                </td>
+                                <td>@item.OrderDate</td>
+                                @*<td>
+                                <a href="@Url.Action("EditUser", "User", new { ID = item.ID })">Edit</a>
+                                <a href="@Url.Action("DeleteUser", "User", new { ID = item.ID })"
+                                   onclick="return confirm('Are you sure you want to delete this user?');" style="color:orangered;" )> DeleteUser </a>
+
+                                <a href="@Url.Action("DeleteUser", "User", new { ID = item.ID })" style="color:orangered">Delete</a>
+                            </td>*@
+
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+
+            </div>
+            @if (Model.EndPage > 1)
+            {
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <!--If Current page is not the First Page, we will show Button/Link to go First or on Previous page-->
+                        @if (Model.CurrentPage > 1)
+                        {
+                            <li>
+                                <a href="~/Admin/Order/Index">First</a>
+                            </li>
+                            <li>
+                                <a href="~/Admin/Order/Index?page=@(Model.CurrentPage - 1)">Previous</a>
+                            </li>
+                        }
+                        <!--Paging from StartPage to the end Page-->
+                        @for (var page = Model.StartPage; page <= Model.EndPage; page++)
+                        {
+                            <li class="@(page == Model.CurrentPage ? "active" : "")">
+                                <a href="~/Admin/Order/Index?page=@page">@page</a>
+                            </li>
+                        }
+                        <!--If Current Page is not the Last Page then show Next and Last Button/link on Paging-->
+                        @if (Model.CurrentPage < Model.TotalPages)
+                        {
+                            <li>
+                                <a href="~/Admin/Order/Index?page=@(Model.CurrentPage + 1)">Next</a>
+                            </li>
+                            <li>
+                                <a href="~/Admin/Order/Index?page=@(Model.TotalPages)">Last</a>
+                            </li>
+                        }
+                    </ul>
+                    </nav>
+                    }
+</div>
+    </div>
+</div>
+
+<style>
+    .pagination
+    {
+        padding-left:10px;
+    }
+</style>

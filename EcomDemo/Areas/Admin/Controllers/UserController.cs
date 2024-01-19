@@ -14,7 +14,7 @@ namespace EcomDemo.Areas.Admin.Controllers
         // GET: Admin/User
         public ActionResult Index(AddEditUserModel aeum)
         {
-            if(Request.Cookies["UserName"] != null)
+            if(Request.Cookies["CookieUserName"] != null)
             {
                 UserMasterBAL umb = new UserMasterBAL();
                 aeum = umb.UserGet(aeum);
@@ -28,7 +28,7 @@ namespace EcomDemo.Areas.Admin.Controllers
         }
         public ActionResult Create()
         {
-            if (Request.Cookies["UserName"] != null)
+            if (Request.Cookies["CookieUserName"] != null)
             {
                 return View();
             }
@@ -43,13 +43,13 @@ namespace EcomDemo.Areas.Admin.Controllers
         {
             UserMasterBAL umb = new UserMasterBAL();
             aeum = umb.UserCreate(aeum);
-            return View(aeum);
+            return RedirectToAction("Index", "User");
         }
 
         [HttpGet]
         public ActionResult EditUser(int ID)
         {
-            if (Request.Cookies["UserName"] != null)
+            if (Request.Cookies["CookieUserName"] != null)
             {
                 AddEditUserModel aeum = new AddEditUserModel();
                 UserMasterBAL umb = new UserMasterBAL();
@@ -67,12 +67,12 @@ namespace EcomDemo.Areas.Admin.Controllers
         {
             UserMasterBAL umb = new UserMasterBAL();
             aeum = umb.UserEditDone(aeum);
-            return View(aeum);
+            return RedirectToAction("Index", "User");
         }
         
         public ActionResult DeleteUser(int ID)
         {
-            if (Request.Cookies["UserName"] != null)
+            if (Request.Cookies["CookieUserName"] != null)
             {
                 AddEditUserModel aeum = new AddEditUserModel();
                 UserMasterBAL umb = new UserMasterBAL();
@@ -84,6 +84,98 @@ namespace EcomDemo.Areas.Admin.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
+        }
+
+        public ActionResult ContactUs(ContactWithUs cwu)
+        {
+            if (Request.Cookies["CookieUserName"] != null)
+            {
+                try
+                {
+                    UserMasterBAL umb = new UserMasterBAL();
+                    cwu = umb.GetContactUsLists(cwu);
+                    return View(cwu);
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+            return RedirectToAction("Login", "Account");
+        }
+
+
+        //public ActionResult ViewMessage(DateTime ContactDate, int ID)
+        //{
+        //    try
+        //    {
+        //        ContactWithUs cwu = new ContactWithUs();
+        //        cwu.ContactDate = ContactDate;
+        //        cwu.UID = ID;
+        //        UserMasterBAL umb = new UserMasterBAL();
+        //        cwu = umb.ViewMessage(cwu);
+        //        return View(cwu);
+        //    }
+        //    catch (Exception)
+        //    {
+
+        //        throw;
+        //    }
+        //}
+        public ActionResult ViewMessage(int CoID)
+        {
+            try
+            {
+                ContactWithUs cwu = new ContactWithUs();
+                cwu.CoID = CoID;
+                UserMasterBAL umb = new UserMasterBAL();
+                cwu = umb.ViewMessage(cwu);
+                return View(cwu);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        //public ActionResult DeleteMessage(DateTime ContactDate, int ID)
+        //{
+        //    try
+        //    {
+        //        ContactWithUs cwu = new ContactWithUs();
+        //        cwu.ContactDate = ContactDate;
+        //        cwu.UID = ID;
+        //        UserMasterBAL umb = new UserMasterBAL();
+        //        cwu = umb.DeleteMessage(cwu);
+        //        TempData["MessageDeleted"] = "MessageDeleted";
+        //        return RedirectToAction("ContactUs", "User");
+        //    }
+        //    catch (Exception)
+        //    {
+
+        //        throw;
+        //    }
+
+        //}
+        public ActionResult DeleteMessage(int CoID)
+        {
+            try
+            {
+                ContactWithUs cwu = new ContactWithUs();
+                cwu.CoID = CoID;
+                UserMasterBAL umb = new UserMasterBAL();
+                cwu = umb.DeleteMessage(cwu);
+                TempData["MessageDeleted"] = "MessageDeleted";
+                return RedirectToAction("ContactUs", "User");
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
         }
     }
 }

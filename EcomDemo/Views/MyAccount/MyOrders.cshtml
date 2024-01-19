@@ -1,0 +1,184 @@
+﻿@model EcomDemo.Model.OrderList
+@{
+    ViewBag.Title = "OrderListOfUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="breadcrumb-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="breadcrumb-list">
+                    <h1>Order List</h1>
+                    <ul>
+                        <li>
+                        @*<a href="index.html">*@
+                                <h2>
+                                    Previous Orders Of @Model.UserName
+                                </h2>
+                            @*</a>*@ 
+                        <span class="divider"></span></li>
+                        @*<li><a href="cart.html">Shopping cart</a> <span class="divider">|</span></li>
+                        <li>Shopping cart</li>*@
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="cart-main-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-content table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="product-thumbnail">SrNo</th>
+                                <th class="product-name">BillNo</th>
+                                <th class="product-price">PaymentMode</th>
+                                <th class="product-quantity">TransactionID</th>
+                                <th class="product-subtotal">Status</th>
+                                <th class="product-subtotal">Total Qty</th>
+                                <th class="product-remove">Total Amount</th>
+                                <th class="product-remove">Order Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.orderLists != null)
+                            {
+                                foreach (var item in Model.orderLists)
+                                {
+                                    @*using (Html.BeginForm("UpdateCart", "MyAccount", FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.HiddenFor(model => model.PID, new { Value = item.PID })*@
+                                    <tr>
+                                        <td class="product-thumbnail">@item.SrNo</td>
+                                        <td class="product-name">
+                                            <a href="@Url.Action("MyOrderDetails", "MyAccount", new {BillNo = item.BillNo})">
+                                                @item.BillNo
+                                            </a>
+                                        </td>
+                                        <td class="product-price">
+                                            @if (item.PaymentMode == 1)
+                                            {
+                                                <h6>Direct Bank Transfer</h6>
+                                            }
+                                            @if (item.PaymentMode == 2)
+                                            {
+                                                <h6>COD</h6>
+                                            }
+                                            @if (item.PaymentMode == 3)
+                                            {
+                                                <h6>Cheque Payment</h6>
+                                            }
+                                        </td>
+                                        <td class="product-name">@item.TransactionID</td>
+                                        <td class="product-name">
+                                            @if (item.Status == 1)
+                                            {
+                                                <h6 style="color: #a1ef53; ">Received</h6>
+                                            }
+                                            @if (item.Status == 2)
+                                            {
+                                                <h6 style="color: #4461fa; ">In Process</h6>
+                                            }
+                                            @if (item.Status == 3)
+                                            {
+                                                <h6 style="color: #9a9009; ">Shipped</h6>
+                                            }
+                                            @if (item.Status == 4)
+                                            {
+                                                <h6 style="color: #a44f4f; ">Delivered</h6>
+                                            }
+                                            @if (item.Status == 5)
+                                            {
+                                                <h6 style="color: #ff0000; ">Order Cancel</h6>
+                                            }
+                                        </td>
+                                        <td class="product-name">@item.TotalQty</td>
+                                        <td class="product-name">
+                                            @item.TotalAmount.ToString("C0", new System.Globalization.CultureInfo("en-IN"))
+                                        </td>
+                                        <td>@item.OrderDate</td>
+                                    </tr>
+                                    //}
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="12">
+                                        <h1>No Orders in your account!</h1>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-12 mt-auto float-end text-right">
+                <div class="buttons-cart" id="buymore">
+                    <a href="@Url.Action("Index", "Products")">Buy More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<!-- login-area end -->
+<!--   Core JS Files   -->
+<script src="~/Areas/Admin/assets/js/jquery.3.2.1.min.js" type="text/javascript"></script>
+<script src="~/Areas/Admin/assets/js/bootstrap.min.js" type="text/javascript"></script>
+
+<!--  Charts Plugin -->
+<script src="~/Areas/Admin/assets/js/chartist.min.js"></script>
+
+<!--  Notifications Plugin    -->
+<script src="~/Areas/Admin/assets/js/bootstrap-notify.js"></script>
+
+<!--  Google Maps Plugin    -->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+
+<!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
+<script src="~/Areas/Admin/assets/js/light-bootstrap-dashboard.js?v=1.4.0"></script>
+
+<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
+<script src="~/Areas/Admin/assets/js/demo.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+<script>
+
+@if (TempData["RemoveItemFromCart"] != null)
+{
+    <text>
+    toastr.success('', 'Item Removed from Cart');
+                            </text>
+
+}
+@if (TempData["NoItemInCart"] != null)
+{
+    <text>
+    toastr.error('', 'No Item in Cart List');
+                            </text>
+
+}
+@if (TempData["CartUpdated"] != null)
+{
+    <text>
+    toastr.success('', 'Cart has been updated!');
+                            </text>
+
+}
+</script>
+
+<style>
+    #buymore{
+        margin-right : 0px;
+    }
+</style>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EcomDemo.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,9 +9,10 @@ namespace EcomDemo.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        public ActionResult Index(UserLogin ul)
         {
-            return View();
+            
+            return View(ul);
         }
 
         public ActionResult About()
